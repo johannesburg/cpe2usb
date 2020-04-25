@@ -23,6 +23,8 @@ while(True):
    serial_read()
 ```
 
+Note: `serial_bytes_available` is only true when there are bytes available to read on the serial communication channel (USB). You can read more about it in the [docs](https://circuitpython.readthedocs.io/en/latest/shared-bindings/supervisor/Runtime.html?highlight=serial_bytes#supervisor.Runtime.runtime.serial_bytes_available). 
+
 On the *host* (computer that's connected over USB to the CPE), add the following `usb_send.py`:
 
 Before running the file, determine the CPE's serial port. Follow 
@@ -186,3 +188,5 @@ parsed message:  b'4,0,1'
 To try another color sequence, press button A, and repeat!
 
 We leave analysis of the above code as an exercise for the reader. Happy hacking!
+
+Thanks to [this](https://stackoverflow.com/questions/48922189/receive-data-from-host-computer-using-circuit-python-on-circuit-playground-expre) Stack Overflow post for the general awareness of this approach.
