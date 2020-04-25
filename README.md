@@ -31,9 +31,9 @@ Before running the file, determine the CPE's serial port. Follow
 [these instructions](https://learn.adafruit.com/welcome-to-circuitpython/advanced-serial-console-on-mac-and-linux#whats-the-port-15-1)
 for linux and mac. 
 
-You can type the following command on linux/mac:
-`ls /dev/tty.*`
-to find the relevant port. On linux it's likely to look like `ttyACM0` (or some other number) 
+You can type the following command on mac:
+`ls /dev/tty.*` or for linux `ls /dev/tty.*`
+to find the relevant port (the commands are essentially the same, but each platform uses slightly different naming conventions). On linux the port name is likely to look like `ttyACM0` (or some other number) 
 and on mac, something like `tty.usbmodem14213`. Fill in the correct name below, where it says `<USB NAME>`
 
 ```python
@@ -136,7 +136,7 @@ while(True):
             wait_color = False
 ```
 
-color_host.py
+`color_host.py`
 
 ```python
 import serial
