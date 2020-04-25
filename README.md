@@ -93,3 +93,96 @@ received: ['Temperature C: 25.5289\r\n']
 received: ['Temperature C: 25.551\r\n']
 ```
 Yes, my apartment is nice and toasty 🔥
+
+# Communication is a 2 way street
+
+The following is a more complex example which uses three-step protocol to communicate from CPE to host then back to CPE.
+
+The desired behavior is as follows:
+- When button A is pressed
+- Enter a new color for into host's command prompt
+- Change color on CPE to desired color
+
+To do this, we will need to:
+1. Send a button_message from CPE to host when button is pressed, then *wait* for a *color_message*
+2. Host will *wait* for button_message, then query user for color, then send a *color_message* to CPE
+3. The CPE, on receiving a *color_message* will change all LED colors
+
+With this in mind, read the following code:
+
+`code.py`
+```python
+import time
+import supervisor
+from adafruit_circuitplayground import cp
+
+wait_color = False
+
+while(True):
+    if cp.button_a and not wait_color:
+        print("button_message")
+        wait_color = True
+
+    if wait_color and supervisor.runtime.serial_bytes_available:
+        value = input()
+        rgb = value.strip().split(',')
+        if rgb and len(rgb) == 3:
+            r = int(rgb[0])
+            g = int(rgb[1])
+            b = int(rgb[2])
+            cp.pixels.fill((r, g, b))
+            wait_color = False
+```
+
+color_host.py
+
+```python
+import serial
+
+ser = serial.Serial(
+             '/dev/tty.usbmodem14301',
+             baudrate=115200,
+             timeout=0.01)
+
+while(True):
+    x = ser.readlines()
+    if len(x) > 0:
+        print("received: {}".format(x))
+        in_msg = str(x[0].strip())
+        print("parsed message: ", in_msg)
+        if "button_message" in in_msg:
+            r = input('red    (0-255): ')
+            g = input('green  (0-255): ')
+            b = input('blue   (0-255): ')
+            out_msg = ','.join([r, g, b]) + '\r\n'
+            ser.write(bytes(out_msg, 'UTF-8'))
+```
+To run, add `code.py` to the CPE (be sure the code updates), update `USB NAME` in `color_host.py` and then run it on the host system. 
+
+The device should work as follows:
+1. *Press Button A* on the CPE
+
+2. The following should appear in the terminal where `color_host` is running:
+```bash
+received: [b'button_message\r\n']
+parsed message:  b'button_message'
+red    (0-255):
+```
+
+3. After the colon, enter a 'red' value for the LED (in the range 0-255) then press Return. Repeat this step for blue and green values. When you press return for the 'blue' value, the RGB values will be transmited to the CPE, and change the colors of all LEDs. 
+
+Your entire terminal read out should look as follows:
+
+```bash
+received: [b'button_message\r\n']
+parsed message:  b'button_message'
+red    (0-255): 4
+green  (0-255): 0
+blue   (0-255): 1
+received: [b'4,0,1\r\n']
+parsed message:  b'4,0,1'
+```
+
+To try another color sequence, press button A, and repeat!
+
+We leave analysis of the above code as an exercise for the reader. Happy hacking!
