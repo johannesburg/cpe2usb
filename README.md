@@ -94,7 +94,7 @@ received: ['Temperature C: 25.551\r\n']
 ```
 Yes, my apartment is nice and toasty 🔥
 
-# Communication is a 2 way street
+# Communication is a 2 way street 🛣️
 
 The following is a more complex example which uses three-step protocol to communicate from CPE to host then back to CPE.
 
