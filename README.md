@@ -50,8 +50,12 @@ print("received: {}".format(x))
 ```
 
 Once `code.py` is loaded onto the CPE, run `usb_send.py` on your host system. 
-It will send the phrase `"Hello from CircuitPython"` to the CPE, which will in-turn 
+It will send the phrase `"HELLO from CircuitPython"` to the CPE, which will in-turn 
 return it back to be printed. 
+
+Basically, we are opening a serial connection to the CPE, then writing the message, and then waiting to read back a one line response, and printing it. Only one serial connection to the device can be open at a time, so be sure to close the serial view in the mu editor or your terminal before running the above code.
+
+To understand exactly what each line of code is doing, consult the [pyserial documentation](https://pyserial.readthedocs.io/en/latest/shortintro.html). I would highly suggest doing so!
 
 # Streaming CPE sensor data over USB
 
