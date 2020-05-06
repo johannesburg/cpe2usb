@@ -32,7 +32,7 @@ Before running the file, determine the CPE's serial port. Follow
 for linux and mac. 
 
 You can type the following command on mac:
-`ls /dev/tty.*` or for linux `ls /dev/tty*`
+`ls /dev/tty.*` or for linux `ls -l /dev/tty`
 to find the relevant port (the commands are essentially the same, but each platform uses slightly different naming conventions). On linux the port name is likely to look like `ttyACM0` (or some other number) 
 and on mac, something like `tty.usbmodem14213`. Fill in the correct name below, where it says `<USB NAME>`
 
